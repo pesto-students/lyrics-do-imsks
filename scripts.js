@@ -4,8 +4,12 @@ const songsSelector = document.getElementById("songs__data");
 const paginateSelector = document.getElementById("paginate__buttons");
 
 // Setting values
-const currentPage = 1;
+let currentPage = 1;
 const noOfSongsPerPage = 5;
+let allSongs = [];
+let currecntShowingSongs = [];
+
+paginateSelector.style.display = "none";
 
 // Events Handling
 // 1. Input Search
@@ -49,19 +53,29 @@ const fetchSongs = (word) => {
     .then((response) => {
       return response.json();
     })
-    .then((data) => {
-    //   console.log(data);
+    .then((res) => {
+      paginateSelector.style.display = "flex";
 
-      songsSelector.innerHTML = data.data
-        .map(
-          (song) =>
-            `<div class="song">
-                <h3 class="song__heading">${song.artist.name} - ${song.title}</h3>
-                <button class="lyrics__button" id="lyrics" artistName = "${song.artist.name}" title = "${song.title}">Show Lyrics</button>
+      // Hide Prev on 1st page
+      if (currentPage === 1) {
+        document.getElementById("paginate__prev__button").style.display =
+          "none";
+      }
+
+      allSongs = res.data;
+
+      let html = [];
+      for (let i = 0; i < currentPage * noOfSongsPerPage; i++) {
+        html.push(
+          `<div class="song">
+                <h3 class="song__heading">${allSongs[i].artist.name} - ${allSongs[i].title}</h3>
+                <button class="lyrics__button" id="lyrics" artistName = "${allSongs[i].artist.name}" title = "${allSongs[i].title}">Show Lyrics</button>
             </div>
             `
-        )
-        .join("");
+        );
+      }
+
+      songsSelector.innerHTML = html;
     })
     .catch(function (error) {
       console.log(error);
@@ -91,3 +105,63 @@ const fetchLyrics = (artist, title) => {
       console.log(error);
     });
 };
+
+// Prev Button Pressed
+document
+  .getElementById("paginate__prev__button")
+  .addEventListener("click", (e) => {
+    currentPage = currentPage - 1;
+
+    // if no more songs left to show
+    if (currentPage * noOfSongsPerPage <= 0) {
+      document.getElementById("paginate__prev__button").style.display = "none";
+    } else {
+      let html = [];
+      for (
+        let i = (currentPage - 1) * noOfSongsPerPage;
+        i < currentPage * noOfSongsPerPage;
+        i++
+      ) {
+        html.push(
+          `<div class="song">
+                <h3 class="song__heading">${allSongs[i].artist.name} - ${allSongs[i].title}</h3>
+                <button class="lyrics__button" id="lyrics" artistName = "${allSongs[i].artist.name}" title = "${allSongs[i].title}">Show Lyrics</button>
+            </div>
+            `
+        );
+      }
+
+      songsSelector.innerHTML = html;
+    }
+  });
+
+// Next Button Pressed
+document
+  .getElementById("paginate__next__button")
+  .addEventListener("click", (e) => {
+    currentPage = currentPage + 1;
+
+    document.getElementById("paginate__prev__button").style.display = "flex";
+
+    // if no more songs left to show
+    if (currentPage * noOfSongsPerPage >= allSongs.length) {
+      document.getElementById("paginate__next__button").style.display = "none";
+    } else {
+      let html = [];
+      for (
+        let i = (currentPage - 1) * noOfSongsPerPage;
+        i < currentPage * noOfSongsPerPage;
+        i++
+      ) {
+        html.push(
+          `<div class="song">
+                  <h3 class="song__heading">${allSongs[i].artist.name} - ${allSongs[i].title}</h3>
+                  <button class="lyrics__button" id="lyrics" artistName = "${allSongs[i].artist.name}" title = "${allSongs[i].title}">Show Lyrics</button>
+              </div>
+              `
+        );
+      }
+
+      songsSelector.innerHTML = html;
+    }
+  });

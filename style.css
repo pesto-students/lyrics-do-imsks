@@ -66,18 +66,19 @@ html {
   display: inline-block;
   font-size: 16px;
   padding: 10px 20px;
+  cursor: pointer;
 }
 
-.song{
+.song {
   display: flex;
-  flex-direction:row;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  flex-direction: row;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   padding: 10px 16px 10px 10px;
   margin: auto;
   width: 50%;
 }
 
-.song__heading{
+.song__heading {
   flex-grow: 2;
   color: white;
 }
@@ -94,12 +95,33 @@ html {
   padding: 10px 20px;
 }
 
-.lyrics{
+.lyrics {
   text-align: center;
   color: white;
 }
 
-.lyrics__heading{
-    text-align: center;
-    color: white;
+.lyrics__heading {
+  text-align: center;
+  color: white;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-evenly;
+  width: 20%;
+  margin: auto;
+  padding: 20px 0;
+}
+
+.pagination__button {
+  background-color: #6a5acd;
+  border: transparent;
+  border-radius: 6px;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
 }
